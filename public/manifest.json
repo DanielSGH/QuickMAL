@@ -1,0 +1,32 @@
+{
+
+  "manifest_version": 2,
+  "name": "quickmal",
+  "version": "1.0",
+
+  "description": "A quick entry-point to edit your MAL entries without having to be in the site",
+
+  "permissions": [
+    "storage",
+    "identity"
+  ],
+
+  "background": {
+    "scripts": [
+      "background.js",
+      "secrets.js"
+    ]
+  },
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "quickmal@example.com"
+    }
+  },
+
+  "browser_action": {
+    "default_title": "quickmal",
+    "default_popup": "index.html"
+  }
+
+}
