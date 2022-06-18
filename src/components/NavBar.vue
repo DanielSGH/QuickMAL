@@ -1,12 +1,12 @@
 <template>
   <div class="navbar bg-base-100">
     <div class="flex-1">
-      <a class="normal-case text-xl pl-2 font-bold">QuickMAL</a>
+      <a class="normal-case text-xl pl-2 font-bold" :class="{ 'text-white': isDark }">QuickMAL</a>
     </div>
     <div class="flex-none gap-2">
       <div class="form-control">
         <label class="label cursor-pointer">
-          <input type="checkbox" class="toggle toggle-md" checked />
+          <input type="checkbox" class="toggle toggle-md" data-toggle-theme="dark,light" data-act-class="ACTIVECLASS" @click="toggleDark" :checked="isDark"/>
         </label>
       </div>
       <div class="dropdown dropdown-end">
@@ -36,6 +36,27 @@ export default {
     avatar: {
       type: String,
       required: true
+    }
+  },
+
+  data(){
+    return {
+      isDark: false,
+    };
+  },
+
+  mounted(){
+    const theme = localStorage.getItem('theme');
+    if (!theme)
+      return;
+    
+    if (theme === 'dark')
+      this.isDark = true;
+  },
+
+  methods: {
+    toggleDark(){
+      this.isDark = !this.isDark;
     }
   }
 }
