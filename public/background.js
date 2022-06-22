@@ -14,10 +14,8 @@ browser.runtime.onInstalled.addListener(async () => {
   fetchToken(params);
 
   // save token here, then get user details
-  let access_details = '';
-  await browser.storage.local.get('authresponse').then(res => access_details = res.authresponse)
-  if (access_details === '')
-    return console.log('something went wrong with getting the details from storage');
+  const access_details = JSON.parse(localStorage.getItem('authresponse'));
+  console.log(access_details);
   
   // get the user's details from MAL
   makeLocalAnimeList(access_details.access_token);
@@ -56,7 +54,7 @@ function fetchToken(params) {
       token_type: access.token_type
     }
 
-    browser.storage.local.set({ authresponse });
+    localStorage.setItem('authresponse', JSON.stringify(authresponse));
   })
   .catch(error => console.log(error));
 }
@@ -70,7 +68,7 @@ function makeLocalAnimeList(bearer) {
   })
   .then(res => res.json())
   .then(animelist => {
-    browser.storage.local.set({ animelist });
+    localStorage.setItem('animelist', JSON.stringify(animelist));
   })
   .catch(e => {
     // should display the error message on screen
@@ -87,7 +85,7 @@ function fetchUserData(bearer){
   })
   .then(res => res.json())
   .then(userdata => {
-    browser.storage.local.set({ userdata });
+    localStorage.setItem('userdata', JSON.stringify(userdata));
   })
   .catch(e => {
     // should display the error message on screen
