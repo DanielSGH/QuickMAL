@@ -61,6 +61,12 @@ export default {
         'bg-gray-400': this.entryStatus === 'plan_to_watch',
       };
     },
+
+    methods: {
+      updateEntry(){
+        // TODO: call function in MAL.js to send PUT for animelist
+      }
+    },
   },
 }
 </script>

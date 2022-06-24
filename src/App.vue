@@ -44,23 +44,21 @@ export default {
 
   async mounted(){
     themeChange(false);
+    this.mal.refreshTokenIfNeeded(); // no need to await, refreshing token can happen in background
     this.getUserData();
-    await this.loadUserAnimeList();
+    this.animelist = await this.mal.getAnimeList();
   },
 
   methods: {
     getUserData(){
-      const userdata = JSON.parse(localStorage.getItem('userdata'));
-      // use this as example content
-      if (userdata) {
-        this.userdata = userdata;
-        return;
-      }
+      const userdata = this.mal.getUser();
+      if (!userdata)
+        return this.openAlertBox('Failed to retrieve user data...');
 
-      this.openAlertBox('Failed to retrieve user data...');
+      this.userdata = userdata;
     },
 
-    openAlertBox(message){
+    openAlertBox(message = 'Unexpected 500'){
       this.showBox = true;
       this.message = message;
     },
@@ -68,23 +66,6 @@ export default {
     closeAlertBox(){
       this.showBox = false;
     },
-
-    async loadUserAnimeList(){
-      const args = {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ` // make this hidden
-        }
-      }
-
-      try {
-        const response = await fetch('https://api.myanimelist.net/v2/users/@me/animelist?fields=id,title,main_picture,alternative_titles,start_date,end_date,synopsis,mean,rank,popularity,num_list_users,num_scoring_users,nsfw,created_at,updated_at,media_type,status,genres,my_list_status,num_episodes,start_season,broadcast,source,average_episode_duration,rating,pictures,background,related_anime,related_manga,recommendations,studios,statistics&limit=1000', args)
-        const animelist = await response.json();
-        this.animelist = animelist.data;
-      } catch (e) {
-        console.log(e);
-      }
-    }
   },
 }
 </script>

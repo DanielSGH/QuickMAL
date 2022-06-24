@@ -1,5 +1,4 @@
 browser.runtime.onInstalled.addListener(async () => {
-  const client_id = VUE_APP_CLIENT_ID;
   const code_challenge = generateRandom(128);
 
   // get token details from API, set token details in localStorage
@@ -49,7 +48,7 @@ function fetchToken(params) {
   .then(access => {
     const authresponse = {
       access_token: access.access_token,
-      expires_in: access.expires_in + Date.now(),
+      expires_in: access.expires_in * 1000 + Date.now(),
       refresh_token: access.refresh_token,
       token_type: access.token_type
     }
