@@ -1,7 +1,18 @@
 <template>
-  <div class="navbar bg-base-100 shadow-lg">
+  <div class="navbar bg-base-100 shadow-lg top-0 sticky z-10">
     <div class="flex-1">
-      <a class="normal-case text-xl pl-2 font-bold">QuickMAL</a>
+      <a class="normal-case text-xl pl-2 font-bold">Q</a>
+      <div class="dropdown mt-2 ml-4">
+        <button class="btn btn-sm">{{ filterOption }}</button>
+        <ul tabindex="0" class="dropdown-content menu menu-compact rounded-md p-2 shadow bg-[#f4f4f5] dark:bg-gray-700 w-36">
+          <li v-for="option in mal.getStatusOptions()" :key="option">
+            <router-link :to="'/animelist/' + option.id">{{ option.name }}</router-link>
+          </li>
+          <li>
+            <router-link to="/animelist/all">All</router-link>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="flex-none gap-2">
       <div class="form-control">
@@ -33,6 +44,7 @@
 </template>
 
 <script>
+
 export default {
   props: {
     avatar: {
@@ -56,6 +68,14 @@ export default {
       this.isDark = true;
 
     this.setTailwindDark();
+  },
+
+  computed: {
+    filterOption() {
+      if (this.$route.params.filter)
+        return this.$route.params.filter.replaceAll('_', ' ');
+      return 'watching';
+    }
   },
 
   methods: {

@@ -15,8 +15,7 @@ constructor(){
     }
   }
 
-  async getUser(){
-    // return JSON.parse(localStorage.getItem('userdata'));
+  async getUser() {
     if (!this.hasResponse) return;
 
     const response = await fetch(proxy + "https://api.myanimelist.net/v2/users/@me", {
@@ -26,7 +25,7 @@ constructor(){
       }
     })
     const userdata = await response.json();
-    return userdata;
+    return userdata || false;
   }
 
   async getAnimeList(limit = 1000) {
@@ -40,7 +39,7 @@ constructor(){
     }
 
     try {
-      const response = await fetch(proxy + `https://api.myanimelist.net/v2/users/@me/animelist?fields=id,title,main_picture,alternative_titles,start_date,end_date,synopsis,mean,rank,popularity,num_list_users,num_scoring_users,nsfw,created_at,updated_at,media_type,status,genres,my_list_status,num_episodes,start_season,broadcast,source,average_episode_duration,rating,pictures,background,related_anime,related_manga,recommendations,studios,statistics&limit=${limit}`, args)
+      const response = await fetch(proxy + `https://api.myanimelist.net/v2/users/@me/animelist?fields=id,title,alternative_titles,start_date,end_date,mean,nsfw,media_type,status,my_list_status,num_episodes,rating,pictures,recommendations,statistics&limit=${limit}`, args)
       const animelist = await response.json();
       return animelist.data;
     } catch (error) {
@@ -112,8 +111,6 @@ constructor(){
 
     await fetch(proxy + `https://api.myanimelist.net/v2/anime/${node.id}/my_list_status`, args)
       .catch(e => console.log(e));
-
-    
   }
 
   async deleteEntry(id){
@@ -126,6 +123,16 @@ constructor(){
       method: "DELETE"
     })
     .catch(e => console.log(e));
+  }
+
+  getStatusOptions(){
+    return [
+      {id: 'completed', name: 'Completed'},
+      {id: 'watching', name: 'Watching'},
+      {id: 'on_hold', name: 'On Hold'},
+      {id: 'dropped', name: 'Dropped'},
+      {id: 'plan_to_watch', name: 'Plan to Watch'},
+    ]
   }
 }
 

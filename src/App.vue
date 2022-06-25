@@ -11,27 +11,20 @@
     @close="closeAlertBox"
   ></alert-box>
 
-  <anime-entry v-for="entry in animelist" :key="entry"
-    :node="entry.node"
-  ></anime-entry>
+  <router-view></router-view>
 </template>
 
 <script>
 import { themeChange } from 'theme-change';
-import AnimeEntry from './components/AnimeEntry.vue';
 
 export default {
   name: 'App',
-  components: {
-    AnimeEntry,
-  },
-
+  
   data(){
     return {
       userdata: null,
       showBox: false,
       message: '',
-      animelist: null,
     };
   },
 
@@ -39,7 +32,6 @@ export default {
     themeChange(false);
     this.mal.refreshTokenIfNeeded(); // no need to await, refreshing token can happen in background
     this.getUserData();
-    this.animelist = await this.mal.getAnimeList(); // check for error getting animelist
   },
 
   methods: {

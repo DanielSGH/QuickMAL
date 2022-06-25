@@ -10,15 +10,8 @@ browser.runtime.onInstalled.addListener(async () => {
     'code_verifier': code_challenge,
     'grant_type': 'authorization_code',
   }
-  fetchToken(params);
 
-  // save token here, then get user details
-  const access_details = JSON.parse(localStorage.getItem('authresponse'));
-  console.log(access_details);
-  
-  // get the user's details from MAL
-  makeLocalAnimeList(access_details.access_token);
-  fetchUserData(access_details.access_token);
+  fetchToken(params);
 })
 
 function generateRandom(length) {
@@ -56,38 +49,4 @@ function fetchToken(params) {
     localStorage.setItem('authresponse', JSON.stringify(authresponse));
   })
   .catch(error => console.log(error));
-}
-
-function makeLocalAnimeList(bearer) {
-  fetch(proxy + 'https://api.myanimelist.net/v2/users/@me/animelist?fields=id,title,main_picture,alternative_titles,start_date,end_date,synopsis,mean,rank,popularity,num_list_users,num_scoring_users,nsfw,created_at,updated_at,media_type,status,genres,my_list_status,num_episodes,start_season,broadcast,source,average_episode_duration,rating,pictures,background,related_anime,related_manga,recommendations,studios,statistics&limit=1000', {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${bearer}`
-    }
-  })
-  .then(res => res.json())
-  .then(animelist => {
-    localStorage.setItem('animelist', JSON.stringify(animelist));
-  })
-  .catch(e => {
-    // should display the error message on screen
-    console.log(e);
-  })
-}
-
-function fetchUserData(bearer){
-  fetch(proxy + 'https://api.myanimelist.net/v2/users/@me', {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${bearer}`
-    }
-  })
-  .then(res => res.json())
-  .then(userdata => {
-    localStorage.setItem('userdata', JSON.stringify(userdata));
-  })
-  .catch(e => {
-    // should display the error message on screen
-    console.log(e);
-  })
 }

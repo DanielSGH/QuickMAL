@@ -33,7 +33,7 @@
       />
 
       <select v-model="mutableNode.my_list_status.status" @change="updateAnimeList" ref="status" class="select select-sm w-36 text-xs max-w-xs absolute bottom-1 right-3">
-        <option v-for="option in status_options" :key="option" :value="option.id" :selected="option.id === mutableNode.my_list_status.status">{{ option.name }}</option>
+        <option v-for="option in mal.getStatusOptions()" :key="option" :value="option.id" :selected="option.id === mutableNode.my_list_status.status">{{ option.name }}</option>
       </select>
     </div>
   </div>
@@ -47,13 +47,6 @@ export default {
 
   data(){
     return {
-      status_options: [
-        {id: 'completed', name: 'Completed'},
-        {id: 'watching', name: 'Watching'},
-        {id: 'on_hold', name: 'On Hold'},
-        {id: 'dropped', name: 'Dropped'},
-        {id: 'plan_to_watch', name: 'Plan to Watch'},
-      ],
       mutableNode: this.node,
       inputValue: '',
     };
@@ -61,10 +54,10 @@ export default {
 
   methods: {
     async updateAnimeList(){
+      this.mutableNode.my_list_status.num_episodes_watched = this.inputValue || this.mutableNode.my_list_status.num_episodes_watched;
       for (let [key] of Object.entries(this.$refs))
         this.$refs[key].blur()
 
-      this.mutableNode.my_list_status.num_episodes_watched = this.inputValue || this.mutableNode.my_list_status.num_episodes_watched;
       await this.mal.updateAnimeList(this.mutableNode);
     }
   },
