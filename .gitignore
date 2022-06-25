@@ -3,7 +3,7 @@ node_modules
 /dist
 .env
 secrets.js
-/src/api
+/src/api/api.js
 
 # local env files
 .env.local

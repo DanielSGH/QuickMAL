@@ -1,6 +1,6 @@
 <template>
   <nav-bar
-    :avatar="(userdata ? userdata.picture : 'https://api.lorem.space/image/face?hash=33791')"
+    :avatar="(userdata ? userdata.picture : 'https://c.tenor.com/2rPXdvoBu6IAAAAd/moyai-moyai-emoji.gif')"
   ></nav-bar>
 
   <alert-box 
@@ -12,14 +12,7 @@
   ></alert-box>
 
   <anime-entry v-for="entry in animelist" :key="entry"
-    :entry-picture="entry.node.main_picture.medium"
-    :entry-status="entry.node.my_list_status.status"
-    :entry-title="entry.node.title"
-    :entry-alt-title="entry.node.alternative_titles.en"
-    :entry-mean="entry.node.mean"
-    :entry-score="entry.node.my_list_status.score"
-    :entry-episodes="entry.node.num_episodes"
-    :episodes-watched="entry.node.my_list_status.num_episodes_watched"
+    :node="entry.node"
   ></anime-entry>
 </template>
 
@@ -46,12 +39,12 @@ export default {
     themeChange(false);
     this.mal.refreshTokenIfNeeded(); // no need to await, refreshing token can happen in background
     this.getUserData();
-    this.animelist = await this.mal.getAnimeList();
+    this.animelist = await this.mal.getAnimeList(); // check for error getting animelist
   },
 
   methods: {
-    getUserData(){
-      const userdata = this.mal.getUser();
+    async getUserData(){
+      const userdata = await this.mal.getUser();
       if (!userdata)
         return this.openAlertBox('Failed to retrieve user data...');
 
