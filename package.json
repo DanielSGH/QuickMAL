@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "autoprefixer": "^10",
-    "boxicons": "^2.1.2",
     "core-js": "^3.8.3",
     "daisyui": "^2.15.4",
     "postcss": "^8",

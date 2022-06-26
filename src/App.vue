@@ -28,7 +28,7 @@ export default {
     };
   },
 
-  async mounted(){
+  async mounted() {
     themeChange(false);
     this.mal.refreshTokenIfNeeded(); // no need to await, refreshing token can happen in background
     this.getUserData();

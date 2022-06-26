@@ -42,9 +42,10 @@ export default {
       }
         
       this.filteredlist = this.animelist.filter(entry => entry.node.my_list_status.status === filter);
+      if (this.filteredlist.length === 0)
+        this.$router.replace('/animelist/completed');
     }
   }
-  
 }
 </script>
 
