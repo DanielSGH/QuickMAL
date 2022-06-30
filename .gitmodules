@@ -1,0 +1,3 @@
+[submodule "QuickMAL-NodeJS"]
+	path = QuickMAL-NodeJS
+	url = https://github.com/DanielSGH/QuickMAL-NodeJS
