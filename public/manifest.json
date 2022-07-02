@@ -8,7 +8,9 @@
 
   "permissions": [
     "storage",
-    "identity"
+    "identity",
+    "https://myanimelist.net/v1/*",
+    "https://api.myanimelist.net/v2/*"
   ],
 
   "background": {

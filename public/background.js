@@ -1,10 +1,9 @@
 browser.runtime.onInstalled.addListener(async () => {
   const code_challenge = generateRandom(128);
 
-  // get token details from API, set token details in localStorage
+  //get token details from API, set token details in localStorage
   const redirect = await launchAuth(code_challenge);
   const authcode = redirect.substring(redirect.indexOf('code=') + 5);
-  console.log(redirect);
 
   fetchToken(authcode, code_challenge);
 })
@@ -28,5 +27,4 @@ async function fetchToken(authcode, verifier) {
   const response = await fetch(auth_handler + `/mal/oauth?authcode=${authcode}&verifier=${verifier}`, { method: 'GET' });
   const authresponse = await response.json();
   localStorage.setItem('authresponse', response.ok && authresponse.success ? JSON.stringify(authresponse.data) : false);
-  console.log(authresponse);
 }

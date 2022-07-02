@@ -16,6 +16,7 @@
 
 <script>
 import { themeChange } from 'theme-change';
+import { runtime } from 'webextension-polyfill';
 
 export default {
   name: 'App',
@@ -28,17 +29,20 @@ export default {
     };
   },
 
-  async mounted() {
+  mounted() {
     themeChange(false);
-    this.mal.refreshTokenIfNeeded(); // no need to await, refreshing token can happen in background
+    this.mal.refreshTokenIfNeeded();
     this.getUserData();
   },
 
   methods: {
     async getUserData(){
       const userdata = await this.mal.getUser();
-      if (!userdata)
-        return this.openAlertBox('Failed to retrieve user data...');
+      if (!userdata) {
+        this.openAlertBox('Please log in again...');
+        setTimeout(() => runtime.reload(), 1500)
+        return;
+      }
 
       this.userdata = userdata;
     },

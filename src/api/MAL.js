@@ -1,19 +1,23 @@
-import {proxy, client_id} from './api.js';
+import {proxy, auth_handler} from './api.js';
 
 class MAL {
-constructor(){
+  constructor(){
     this.hasResponse = false;
     const response = localStorage.getItem('authresponse');
+    const authresponse = JSON.parse(response);
     
-    if (response) {
+    if (response && authresponse.access_token) {
       this.hasResponse = true;
-      const authresponse = JSON.parse(response);
 
       this.access_token = authresponse.access_token;
       this.expires_in = authresponse.expires_in;
       this.refresh_token = authresponse.refresh_token;
     }
   }
+
+  checkForAccessToken(){
+    return this.hasResponse;
+  }  
 
   async getUser() {
     if (!this.hasResponse) return;
@@ -39,6 +43,7 @@ constructor(){
     }
 
     try {
+      // getting extra information I might need to display in the future
       const response = await fetch(proxy + `https://api.myanimelist.net/v2/users/@me/animelist?fields=id,title,alternative_titles,start_date,end_date,mean,nsfw,media_type,status,my_list_status,num_episodes,rating,pictures,recommendations,statistics&limit=${limit}`, args)
       const animelist = await response.json();
       return animelist.data;
@@ -47,44 +52,25 @@ constructor(){
     }
   }
 
-  async refreshTokenIfNeeded(){
-    if (!this.hasResponse) return;
-
-    if (Date.now() > this.expires_in - 60000)
+  isTokenExpired(){
+    if (Date.now() < this.expires_in)
       return false;
 
-    const params = {
-      'client_id': client_id,
-      'grant_type': 'refresh_token',
-      'refresh_token': this.refresh_token,
-    }
+    return true;
+  }
 
-    const args = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: new URLSearchParams(params)
-    };
+  async refreshTokenIfNeeded(){
+    if (!this.hasResponse) 
+      return false;
 
-    try {
-      const response = await fetch('https://myanimelist.net/v1/oauth2/token', args);
-      const access = await response.json();
+    if (!this.isTokenExpired())
+      return false;
 
-      const authresponse = {
-        access_token: access.access_token,
-        expires_in: access.expires_in + Date.now(),
-        refresh_token: access.refresh_token,
-        token_type: access.token_type
-      }
+    console.log('QUICKMAL: ##### REFRESHING TOKEN IS REQUIRED! #####');
 
-      console.log(authresponse);
-
-      localStorage.removeItem('authresponse');
-      localStorage.setItem('authresponse', JSON.stringify(authresponse));
-    } catch (error) {
-      return error;
-    }
+    const response = await fetch(auth_handler + `/mal/oauth?token=${this.refresh_token}`, { method: 'GET' });
+    const authresponse = await response.json();
+    localStorage.setItem('authresponse', response.ok && authresponse.success ? JSON.stringify(authresponse.data) : false);
   }
 
   async updateAnimeList(node){

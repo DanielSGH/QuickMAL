@@ -1,4 +1,13 @@
 <template>
+  <alert-box
+    message="Invalid input!"
+    :show="showBox"
+    mode="error"
+    :fixed="false"
+    @close="closeAlertBox"
+  ></alert-box>
+
+
   <div class="wrapper m-2">
     <div class="container flex flex-start relative h-28 w-full bg-zinc-100 dark:bg-slate-800 shadow-md rounded-md">
       <!-- status indicator -->
@@ -40,25 +49,47 @@
 </template>
 
 <script>
+import AlertBox from './AlertBox.vue';
 export default {
+  components: { AlertBox },
   props: [
     'node',
+  ],
+  emits: [
+    'listChange'
   ],
 
   data(){
     return {
       mutableNode: this.node,
       inputValue: '',
+      showBox: false,
     };
   },
 
   methods: {
     async updateAnimeList(){
+      if ((+this.inputValue > this.mutableNode.num_episodes) || (+this.inputValue < 0))
+        return this.openAlertBox(); // launch non-fixed popup
+
+      if (+this.inputValue === this.mutableNode.num_episodes)
+        this.mutableNode.my_list_status.status = 'completed';
+      
       this.mutableNode.my_list_status.num_episodes_watched = this.inputValue || this.mutableNode.my_list_status.num_episodes_watched;
+
       for (let [key] of Object.entries(this.$refs))
         this.$refs[key].blur()
 
       await this.mal.updateAnimeList(this.mutableNode);
+      this.$emit('listChange');
+    },
+
+    openAlertBox(){
+      this.showBox = true;
+    },
+
+    closeAlertBox(){
+      this.showBox = false;
     }
   },
 
