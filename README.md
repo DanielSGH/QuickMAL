@@ -18,3 +18,7 @@ Dark                                     |  Light
 3. Enter `about:debugging` in the URL search
 4. Click the `Load temporary Add-on...` button
 5. Navigate to the clone's `dist` folder and click open `manifest.json`
+
+## Other information
+- This project was created with npm version 8.13.1 and node version 18.4.0
+- If these become outdated by the reader's current time and it is no longer possible to build or install, you may find solutions at https://nodejs.org/en/download/releases/
