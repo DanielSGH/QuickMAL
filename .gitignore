@@ -4,7 +4,6 @@ node_modules
 .env
 secrets.js
 /backend
-/src/api/api.js
 
 # local env files
 .env.local
