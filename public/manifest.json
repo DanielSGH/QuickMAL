@@ -6,6 +6,7 @@
 
   "description": "A quick entry-point to edit your MAL entries without having to be in the site",
 
+  
   "permissions": [
     "storage",
     "identity",
@@ -19,16 +20,22 @@
       "secrets.js"
     ]
   },
-
+  
   "browser_specific_settings": {
     "gecko": {
-      "id": "quickmal@example.com"
+      "id": "danielstoyanov@quickmal.xyz"
     }
   },
-
+  
   "browser_action": {
-    "default_title": "quickmal",
+    "default_title": "QuickMAL",
     "default_popup": "index.html"
+  },
+  
+  "icons": {
+    "16": "/icons/icon-16.png",
+    "32": "/icons/icon-32.png",
+    "64": "/icons/icon-64.png",
+    "128": "/icons/icon-128.png"
   }
-
 }

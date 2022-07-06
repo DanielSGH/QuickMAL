@@ -16,8 +16,8 @@
 
       <!-- Main info -->
       <div class="ml-4 mt-1 truncate">
-        <h3 class="truncate"><b>{{ mutableNode.title }}</b></h3>
-        <h4 v-if="mutableNode.title !== mutableNode.alternative_titles.en" class="truncate text-sm">{{ mutableNode.alternative_titles.en.substring(0, 40) }}</h4>
+        <h3 class="truncate"><b>{{ computedTitle }}</b></h3>
+        <h4 v-if="mutableNode.title !== mutableNode.alternative_titles.en" class="truncate text-sm">{{ computedAltTitle }}</h4>
         <p class="text-xs">Mean: <b>{{ mutableNode.mean }}</b></p>
         <p class="text-xs">Score: <b>{{ mutableNode.my_list_status.score }}</b></p>
         <div class="max-w-sm bottom-1 absolute">
@@ -103,6 +103,14 @@ export default {
         'bg-gray-400': this.mutableNode.my_list_status.status === 'plan_to_watch',
       };
     },
+
+    computedTitle() {
+      return this.mutableNode.title.length > 35 ? this.mutableNode.title.substring(0,35) + '...' : this.mutableNode.title;
+    },
+
+    computedAltTitle(){
+      return this.mutableNode.alternative_titles.en.length > 40 ? this.mutableNode.alternative_titles.en.substring(0, 37) + '...' : this.mutableNode.alternative_titles.en;
+    }
   },
 }
 </script>
