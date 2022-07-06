@@ -1,3 +1,5 @@
+const auth_handler = 'https://qm-auth-handler.herokuapp.com';
+
 browser.runtime.onInstalled.addListener(async () => {
   const code_challenge = generateRandom(128);
 
