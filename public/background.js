@@ -1,4 +1,4 @@
-const auth_handler = 'https://qm-auth-handler.herokuapp.com';
+const auth_handler = 'https://frantic-culottes-bass.cyclic.app';
 
 browser.runtime.onInstalled.addListener(async () => {
   const code_challenge = generateRandom(128);
